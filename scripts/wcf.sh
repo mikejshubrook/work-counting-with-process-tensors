@@ -1,46 +1,32 @@
-#!/bin/bash --login
+#!/bin/bash 
 
-#SBATCH -p multicore               # Partition name
-#SBATCH -n 4                      # Number of cores
-#SBATCH -t 7-0                     # Walltime (7 days)
-#SBATCH -a 1-20000                 # Job array range
-#SBATCH -e ./output/%A_%a.err      # Standard error output
-#SBATCH -o ./output/%A_%a.out      # Standard output
-#SBATCH --mail-type=All            # Mail events
-#SBATCH --mail-user=mike.shubrook@manchester.ac.uk
-
-
-# number of cores
-export OMP_NUM_THREADS=$SLURM_NTASKS
+# Set number of threads (adjust to your CPU)
+export OMP_NUM_THREADS=4
 
 # counting parameter values
-export M=$SLURM_ARRAY_TASK_ID # job array index, being used as a counting parameter
-export MSTART=20000 # first value of M used in wcf job array
-export S=5 # time for equilibration
+export MSTART=0 # starting value of counting integer
+export M=10 # number of counting integers to calculate
+export S=1 # time for equilibration
 
-### numerical parameters for the simulation ###
-export STEP_SIZE=0.005 # step size for Trotter
-export PREC=11.0 # SVD precision
+### Numerical parameters ###
+export STEP_SIZE=0.01 # Trotter step size, must be tested for convergence
+export PREC=7.0 # precision: 10^-{p} is the SVD threshold, must be tested for convergence
 
-### Physical parameters for the simulation ###
-# system parameters
-export EPSMAX=25.0 # maximum energy splitting
-export EPS0=0.02 # minimum energy splitting
-export TP=20.0  # protocol time
-export STA=0 # =1 for STA, =0 for no STA (RAW)
-
-# bath parameters
-export ALPHA=0.16 # system-bath coupling strength
-export GAMMA=10.0 # peak width
-export W0=25.0 # peak position
+### Bath parameters ###
 export BETA=1 # inverse temperature
-export WC=5 # cut-off frequency for spectral density (units of w0)
+export GAMMA=10.0 # spectral densit width
+export W0=25.0 # spectral density peak location
+export WC=5 # spectral density cutoff
+export ALPHA=0.02 # coupling strength list, can be a single value or multiple values separated by spaces
 
-# load required modules
-module load apps/binapps/anaconda3/2023.09
+### System parameters ###
+export TP=1.0 # list of protocol times, can be a single value or multiple values separated by spaces
+export EPSMAX=25.0 # maximum energy of the system
+export EPS0=0.02 # minimum energy of the system
+export STA=1 # include shortcut to adiabaticity (1) or not (0)
 
-# run the wcf file
-python wcf-run.py
+# Run scripts - comment out those that are not needed
+python ../src/wcf.py
 
 
 

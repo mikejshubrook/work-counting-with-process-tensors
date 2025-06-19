@@ -10,6 +10,16 @@ import pandas as pd
 # Local imports
 from utils.LandauerErasure_functions import *  # Custom functions (avoid * imports if possible)
 
+
+# Path handling for reliable file saving/loading
+CURRENT_FILE = os.path.abspath(__file__)
+PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_FILE, "../../"))  # Adjust based on your layout
+
+DATA_DIR = os.path.join(PROJECT_ROOT, "data", "wcf-files")
+IF_DIR = os.path.join(PROJECT_ROOT, "data", "InfluenceFunctionals")
+
+
+
 # import numerical parameters from BASH
 
 # numerical parameters for iTEBD
@@ -64,24 +74,39 @@ f = int(tau/STEP_SIZE) # time propagation
 
 
 # define filename of influence functional
-filename = f'InfluenceFunctionals/IF_a{ALPHA}_G{GAMMA}_w{W0}_dt{STEP_SIZE}_p{PREC}.pkl'
+filename = os.path.join(IF_DIR, f'IF_a{ALPHA}_G{GAMMA}_w{W0}_dt{STEP_SIZE}_p{PREC}.pkl')
 
 # load IF
 with open(filename, 'rb') as file:
     itebd = pickle.load(file)
 
-# calculate the WCF for this m
-wcf = process_iteration(itebd, s, f, m, Rho_0, STEP_SIZE, tau, eps0, epstau, N, shift, sta)
-print(wcf)
 
-# Define folder and file name
-folder = f"wcf-files/WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}/chi{MSTART*STEP_SIZE}"
-file_name = f"{folder}/wcf_m{m}.npy"
+for m in range(MSTART, MSTART + M):
+    # print progress
+    print(f"Processing m = {m}...")
+    # calculate the WCF for this m
+    wcf = process_iteration(itebd, s, f, m, Rho_0, STEP_SIZE, tau, eps0, epstau, N, shift, sta)
+    print(wcf)
 
-# Ensure the folder exists
-if not os.path.exists(folder):
-    os.makedirs(folder)
+    # # Define folder and file name
+    # folder = f"wcf-files/WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}/chi{MSTART*STEP_SIZE}"
+    # file_name = f"{folder}/wcf_m{m}.npy"
 
-# Save as .npy
-np.save(file_name, wcf)
-print(f"WCF saved to {file_name}")
+    # Construct folder path using os.path.join
+    folder = os.path.join(
+        DATA_DIR,
+        f"WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}",
+        f"chi{MSTART*STEP_SIZE}"
+    )
+
+    # Make sure the folder exists
+    os.makedirs(folder, exist_ok=True)
+
+    # Construct the full file path
+    file_name = os.path.join(folder, f"wcf_m{m}.npy")
+
+    # Save as .npy
+    np.save(file_name, wcf)
+    print(f"WCF saved to {file_name}")
+
+
