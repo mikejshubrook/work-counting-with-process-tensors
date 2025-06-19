@@ -1,70 +1,93 @@
-# Work counting with process tensors
+# Work Counting with Process Tensors
 
-This project calculates numerically exact quantum work statistics with process tensors.
+This project calculates numerically exact quantum work statistics using process tensors.
 
-# Project Overview
-This code was used to calculate the results in (link to paper).
+---
 
+## Project Overview
 
-# Initial setup
+This code was used to calculate the results presented in (link to paper).
+
+---
+
+## Initial Setup
+
 To run the code, follow these instructions:
-TODO: basic setup, requirements, etc
 
-Create the data folders by running (within 'data' folder) 
-"bash setup_data_folder.sh"
+* **Basic Setup & Requirements:** TODO: Add basic setup instructions and list any software/library requirements.
+* **Create Data Folders:** Navigate to the `data` folder and run the following command:
+    ```bash
+    bash setup_data_folder.sh
+    ```
 
-# Tests
-Run the dynamics test by running (within 'tests' folder) 
-"bash run-dynamics-tests.sh" 
-It will first create an influence functional and then run the system dynamics, and finally it will plot these dynamics.
+---
 
-Run the WCF test by running (within 'tests' folder) 
-"bash run-wcf-tests.sh" 
-This will calculate the WCF using the same parameters used to calculate the influence functional and system dynamics from the previous test. 
+## Tests
 
-To see if your tests have run properly, compare the outputted figures to the files within the 'tests' folder names 'expected-dynamics.png' and 'expected-wcf.png'
+To ensure everything is set up correctly, run the following tests:
 
-TODO: add in moments test as well.
+* **Dynamics Test:** From within the `tests` folder, execute:
+    ```bash
+    bash run-dynamics-tests.sh
+    ```
+    This script will first create an influence functional, then run the system dynamics, and finally plot these dynamics.
+* **Work Characteristic Function (WCF) Test:** From within the `tests` folder, run:
+    ```bash
+    bash run-wcf-tests.sh
+    ```
+    This will calculate the WCF using the same parameters as the influence functional and system dynamics from the previous test.
+* **Verify Test Results:** To confirm your tests ran properly, compare the generated figures to the `expected-dynamics.png` and `expected-wcf.png` files located in the `tests` folder.
+* **Moments Test:** TODO: Add instructions for running the moments test.
 
-# List of parameters
-This project has two main categories of parameters that the user should know about, being physical parameters and numerical parameters. 
+---
 
-The physical parameters tell us about the system that we are trying to simulate, e.g. energy scales, time, etc.
-Numerical parameters are what we use to simulate a given physical situation, e.g. time step, SVD threshold
+## List of Parameters
 
-The goal is to get 'convergence' of the results with repsect to the numerical paraemters, for a given set of physical parameters. When this has been acheived, 
-the results are converged and therefore the results that we are seeing are not due to the way we are simulating this system, but are due to the results of the 
-simulation itself.
+This project utilizes two primary categories of parameters: **physical parameters** and **numerical parameters**.
 
-Below are a breakdown of the physical and numerical parameters used in this project. I will cover the parameters which are used within the bash scripts, 
-and leave the description of other parameters used elsewhere to the files in which they are used.
+* **Physical parameters** describe the system you are simulating, such as energy scales and time.
+* **Numerical parameters** control how the simulation is performed, including the time step and SVD threshold.
 
-Physical parameters: broken down into system, bath, and shared parameters
-System: 
-EPSMAX: (float) maximum energy splitting of the TLS
-EPS0: (float) minimum energy splitting of the TLS
-TP: (float) protocol time, i.e. how long to drive the TLS for
+The goal is to achieve **convergence** of the results with respect to the numerical parameters for a given set of physical parameters. When convergence is achieved, it indicates that the results are robust and not artifacts of the simulation method.
 
-Bath: 
-(note, here we use an underdamped drude-lorentz spectral density, it is possible to change this by changing the spectral density function within src/LandauerErasure_functions.py and the corresponding functions which depend on this)
-BETA: (float) inverse temperature, and the base unit (i.e. all other parameters are measured in units of BETA)
-GAMMA: (float) width of the spectral density
-W0: (float) peak location of the spectral density
-WC: (float) cutoff for the spectral density
-ALPHA: (float) coupling strength between the system and bath
+Below is a breakdown of the physical and numerical parameters used in the bash scripts. Descriptions of other parameters used elsewhere in the project can be found in their respective files.
 
-Numerical parameters: (i.e. simulation parameters)
-STEP_SIZE: Trotter step size, used for discretization of the generalised time axis
-PREC: threshold of SVD, in units of 10^{-PREC}
+### Physical Parameters
 
-Other parameters:
-S: (float) equilibration time, used to perform the first measurement within the TPMP, must be chosen to be large enough to have converged results
-M: (int) counting integer, used to calcualte the WCF along the chi axis, in units of M*STEP_SIZE
-MAX_DIFF_ORDER: (int) used when calculating moments through the finite difference approximation, to calculate those approximations to higher order accuracy (should be an integer and multiple of 2)
+These are broken down into system, bath, and shared parameters.
 
-# Example usage
-I have uploaded video tutorials on my YouTube channel explaining both how the code works, and how to use it. 
-Please use the following link to see the playlist of videos associated with this project:
+#### System Parameters:
+
+* **`EPSMAX`** (float): Maximum energy splitting of the TLS.
+* **`EPS0`** (float): Minimum energy splitting of the TLS.
+* **`TP`** (float): Protocol time, representing the duration for which the TLS is driven.
+
+#### Bath Parameters:
+
+* **(Note: This project uses an underdamped Drude-Lorentz spectral density. You can modify this by changing the spectral density function and corresponding dependent functions within `src/LandauerErasure_functions.py`.)**
+* **`BETA`** (float): Inverse temperature. This serves as the base unit for all other parameters.
+* **`GAMMA`** (float): Width of the spectral density.
+* **`W0`** (float): Peak location of the spectral density.
+* **`WC`** (float): Cutoff for the spectral density.
+* **`ALPHA`** (float): Coupling strength between the system and bath.
+
+### Numerical Parameters (Simulation Parameters)
+
+* **`STEP_SIZE`**: Trotter step size, used for the discretization of the generalized time axis.
+* **`PREC`**: Threshold for Singular Value Decomposition (SVD), expressed in units of $10^{-\text{PREC}}$.
+
+### Other Parameters
+
+These parameters are used elsewhere in the project's code:
+
+* **`S`** (float): Equilibration time. This is used to perform the first measurement within the TPMP and must be chosen large enough to achieve converged results.
+* **`M`** (int): Counting integer, used to calculate the WCF along the chi axis in units of $M \times \text{STEP\_SIZE}$.
+* **`MAX_DIFF_ORDER`** (int): Used when calculating moments through the finite difference approximation to achieve higher-order accuracy. This should be an integer and a multiple of 2.
+
+---
+
+## Example Usage
+
+I've created video tutorials on my YouTube channel that explain both how the code works and how to use it. Please visit the following link to see the playlist of videos associated with this project:
+
 (link to playlist)
-
-
