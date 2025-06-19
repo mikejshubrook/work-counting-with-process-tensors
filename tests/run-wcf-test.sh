@@ -24,7 +24,7 @@ export TP=1.0 # list of protocol times, can be a single value or multiple values
 export EPSMAX=25.0 # maximum energy of the system
 export EPS0=0.02 # minimum energy of the system
 
-# Run scripts - comment out those that are not needed
+# Run scripts
 python ../src/wcf.py
 python ../src/wcf-combine.py
 python wcf-test.py
