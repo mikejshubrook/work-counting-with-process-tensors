@@ -5,12 +5,22 @@ export OMP_NUM_THREADS=4
 
 # counting parameter values
 export MSTART=0 # starting value of counting integer
-export M=50 # number of counting integers to calculate
 export S=1 # time for equilibration
 
 ### Numerical parameters ###
-export STEP_SIZE=0.01 # Trotter step size, must be tested for convergence
-export PREC=9.0 # precision: 10^-{p} is the SVD threshold, must be tested for convergence
+export STEP_SIZE=0.005 # Trotter step size, must be tested for convergence
+export PREC=7.0 # precision: 10^-{p} is the SVD threshold, must be tested for convergence
+
+
+# Choose maximum chi value
+X=0.5
+
+### Numerical parameters ###
+export STEP_SIZE=0.005 # Trotter step size, must be tested for convergence
+
+# Calculate M = X / STEP_SIZE, as an integer
+export M=$(printf "%.0f" $(echo "$X / $STEP_SIZE" | bc -l)) # number of counting integers to calculate
+
 
 ### Bath parameters ###
 export BETA=1 # inverse temperature
@@ -26,6 +36,7 @@ export EPS0=0.02 # minimum energy of the system
 
 # Run scripts - comment out those that are not needed
 python ../src/wcf.py
+python ../src/wcf-combine.py
 
 
 

@@ -83,7 +83,7 @@ for STA in [0, 1]:
         itebd = pickle.load(file)
 
 
-    for m in range(MSTART, MSTART + M):
+    for m in range(MSTART, MSTART + M + 1):
 
         # calculate the WCF for this m
         wcf = process_iteration(itebd, s, f, m, Rho_0, STEP_SIZE, tau, eps0, epstau, N, shift, sta)
