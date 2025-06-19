@@ -162,7 +162,7 @@ for ALPHA in alpha_values: # loop through coupling strengths
             df = pd.DataFrame(data)
 
             # Save the DataFrame to a CSV file
-            output_path = os.path.join(DATA_DIR, f"dyns-a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}.csv")
+            output_path = os.path.join(DATA_DIR, f"moms-a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}.csv")
 
             # Ensure the output directory exists
             os.makedirs(os.path.dirname(output_path), exist_ok=True)
