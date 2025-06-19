@@ -14,20 +14,20 @@ This code was used to calculate the results presented in (link to paper).
 
 To run the code, follow these instructions:
 
-**Set up a virtual environment (recommended):**
+**(1) Set up a virtual environment (recommended):**
 
-**Install requirements:**
+**(2) Install requirements:**
 Make sure you have Python 3.12 installed. Then, from the root of the repository, run:
 
 ```bash
 pip install -r requirements.txt* 
 ```
 
-**Create Data Folders:** 
+**(3) Create Data Folders:** 
 Navigate to the `data` folder and run the following command:
-    ```bash
+```bash
     bash setup_data_folder.sh
-    ```
+```
 
 ---
 
