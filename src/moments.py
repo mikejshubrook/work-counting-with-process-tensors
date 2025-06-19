@@ -66,7 +66,7 @@ S = int(os.environ['S']) # equilibration time - used for performing the first me
 
 # finite different approximation parameters
 MAX_DIFF_ORDER = int(os.environ['MAX_DIFF_ORDER']) # maximum order of finite difference approximation
-NTH_ORDER_DERIV = int(os.environ['NTH_ORDER_DERIV']) # order of the largest derivative we want to calculate (e.g. 1 for mean, 2 for mean and variance, etc.)
+NTH_ORDER_DERIV = 4
 
 # extract alpha values from ALPHA_LIST
 alpha_str = os.environ.get("ALPHA_LIST", "")
