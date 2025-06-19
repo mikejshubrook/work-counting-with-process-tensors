@@ -59,7 +59,7 @@ for ALPHA in alpha_values:
     J = lambda w:  (ALPHA*GAMMA*W0**2 *w) /( (W0**2 - w**2)**2 + (GAMMA*w)**2 )
 
 
-    filename = os.path.join(DATA_DIR, "IF_a0.02_G10.0_w25.0_dt0.01_p7.0.pkl")
+    filename = os.path.join(DATA_DIR, f"IF_a{ALPHA}_G{GAMMA}_w{W0}_dt{STEP_SIZE}_p{PREC}.pkl")
 
     # Ensure directory exists
     os.makedirs(os.path.dirname(filename), exist_ok=True)
