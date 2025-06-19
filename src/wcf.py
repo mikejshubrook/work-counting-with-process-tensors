@@ -83,7 +83,7 @@ for STA in [0, 1]:
 
     for m in range(MSTART, MSTART + M):
         # print progress
-        print(f"Processing m = {m}...")
+        # print(f"Processing m = {m}...")
         # calculate the WCF for this m
         wcf = process_iteration(itebd, s, f, m, Rho_0, STEP_SIZE, tau, eps0, epstau, N, shift, sta)
         print(wcf)
@@ -107,6 +107,6 @@ for STA in [0, 1]:
 
         # Save as .npy
         np.save(file_name, wcf)
-        print(f"WCF saved to {file_name}")
+        # print(f"WCF saved to {file_name}")
 
 

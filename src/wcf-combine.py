@@ -77,7 +77,7 @@ for STA in [0, 1]:
                 # Check if it's indeed a complex number (optional but useful for error handling)
                 if np.iscomplexobj(complex_number):
                     real, imag = complex_number.real, complex_number.imag  # Extract real and imaginary parts
-                    print(file_name, real, imag)
+                    # print(file_name, real, imag)
                     f_out.write(f"{real}\t{imag}\n")  # Write the complex number parts to the output file
             else:
                 print(f"File {file_name} does not exist. Skipping.")
