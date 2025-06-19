@@ -23,7 +23,6 @@ export ALPHA=0.02 # coupling strength list, can be a single value or multiple va
 export TP=1.0 # list of protocol times, can be a single value or multiple values separated by spaces
 export EPSMAX=25.0 # maximum energy of the system
 export EPS0=0.02 # minimum energy of the system
-# export STA=1 # include shortcut to adiabaticity (1) or not (0)
 
 # Run scripts - comment out those that are not needed
 python ../src/wcf.py
