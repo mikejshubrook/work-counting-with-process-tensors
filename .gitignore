@@ -1,5 +1,9 @@
 # Ignore all data files and folders (user/output data)
-data/
+data/dynamics-files
+data/InfluenceFunctionals
+data/moments-files
+data/wcf-files
+data/wcf-files-combined
 
 # Ignore Python bytecode cache
 __pycache__/
