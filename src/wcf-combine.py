@@ -12,7 +12,12 @@ import os
 # Third-party imports
 import numpy as np
 
+# Path handling for reliable file saving/loading
+CURRENT_FILE = os.path.abspath(__file__)
+PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_FILE, "../../"))  # Adjust based on your layout
 
+DATA_DIR = os.path.join(PROJECT_ROOT, "data", "wcf-files")
+WCF_DIR = os.path.join(PROJECT_ROOT, "data", "wcf-files-combined")
 
 ##### IMPORT PARAMETERS FROM BASH #####
 
@@ -45,13 +50,17 @@ CHI0 = MSTART*STEP_SIZE
 CHI_F =  (MSTART+M_TOTAL)*STEP_SIZE
 
 # Define folder name to grab files from
-folder = f"wcf-files/WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}/chi{MSTART*STEP_SIZE}"
-
+# Define folder name to grab files from
+folder = os.path.join(
+    DATA_DIR,
+    f"WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}",
+    f"chi{MSTART * STEP_SIZE}"
+)
 # List of file names to extract data from
-file_names = [f"{folder}/wcf_m{m}.npy" for m in range(MSTART, MSTART+(M_TOTAL+1))]
+file_names = [f"{folder}/wcf_m{m}.npy" for m in range(MSTART, MSTART+(M_TOTAL+1))] #TODO does this need the +1?
 
 # Output file where the combines data 
-output_file = f"wcf-files/WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_t{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}_X{CHI0}_Xf{CHI_F}.txt"
+output_file = f"{WCF_DIR}/WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_t{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}_X{CHI0}_Xf{CHI_F}.txt"
 
 # Open the output file in write mode
 with open(output_file, 'w') as f_out:

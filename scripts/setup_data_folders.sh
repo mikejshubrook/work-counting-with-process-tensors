@@ -8,5 +8,6 @@ mkdir -p data/dynamics-files
 mkdir -p data/InfluenceFunctionals
 mkdir -p data/moments-files
 mkdir -p data/wcf-files
+mkdir -p data/wcf-files-combined
 
 echo "Folders created successfully."
