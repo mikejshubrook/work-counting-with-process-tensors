@@ -28,4 +28,4 @@ export MAX_DIFF_ORDER=4 # maximum order of the finite difference approximation f
 python ../src/IF.py
 python ../src/dynamics.py
 # python ../src/moments.py
-python test-plots.py
+python dynamics-test.py

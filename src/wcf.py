@@ -58,7 +58,9 @@ eps0 = EPS0 * epstau
 wc = WC * BETA
 tau = TP
 
-
+# TODO: this code has been adapted from use on the HPC, which is why each value of m stores a separate
+# WCF, which are then all combined at the end (due to using job arrays).
+# It may be of use to instead remove the need for the combine script, and just save the WCFs in a single file.
 
 for STA in [0, 1]:
     sta = (STA == 1)
@@ -82,22 +84,15 @@ for STA in [0, 1]:
 
 
     for m in range(MSTART, MSTART + M):
-        # print progress
-        # print(f"Processing m = {m}...")
+
         # calculate the WCF for this m
         wcf = process_iteration(itebd, s, f, m, Rho_0, STEP_SIZE, tau, eps0, epstau, N, shift, sta)
-        print(wcf)
-
-        # # Define folder and file name
-        # folder = f"wcf-files/WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}/chi{MSTART*STEP_SIZE}"
-        # file_name = f"{folder}/wcf_m{m}.npy"
 
         # Construct folder path using os.path.join
         folder = os.path.join(
             DATA_DIR,
             f"WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}",
-            f"chi{MSTART*STEP_SIZE}"
-        )
+            f"chi{MSTART*STEP_SIZE}")
 
         # Make sure the folder exists
         os.makedirs(folder, exist_ok=True)
@@ -107,6 +102,5 @@ for STA in [0, 1]:
 
         # Save as .npy
         np.save(file_name, wcf)
-        # print(f"WCF saved to {file_name}")
 
 

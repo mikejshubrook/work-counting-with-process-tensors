@@ -43,11 +43,11 @@ WC = float(os.environ['WC'])                 # cutoff frequency
 # work counting parameters
 S = int(os.environ['S']) # equilibration time - used for performing the first measurement in the two point measurement protocol
 MSTART = int(os.environ['MSTART']) # starting value (in case you dont want to start at chi=0)
-M_TOTAL = int(os.environ['M_TOTAL']) # number of steps along chi to take - what was the size of the job array when running wcf-run.sh   
+M = int(os.environ['M']) # number of steps along chi to take - what was the size of the job array when running wcf-run.sh   
 
 # we convert the M values to chi, so that it is easy to compare WCFs with different values of STEP_SIZE
 CHI0 = MSTART*STEP_SIZE
-CHI_F =  (MSTART+M_TOTAL)*STEP_SIZE
+CHI_F =  (MSTART+M)*STEP_SIZE
 
 
 for STA in [0, 1]:
@@ -60,7 +60,7 @@ for STA in [0, 1]:
         f"chi{MSTART * STEP_SIZE}"
     )
     # List of file names to extract data from
-    file_names = [f"{folder}/wcf_m{m}.npy" for m in range(MSTART, MSTART+(M_TOTAL+1))] #TODO does this need the +1?
+    file_names = [f"{folder}/wcf_m{m}.npy" for m in range(MSTART, MSTART+(M+1))] #TODO does this need the +1?
 
     # Output file where the combines data 
     output_file = f"{WCF_DIR}/WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_t{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}_X{CHI0}_Xf{CHI_F}.txt"
