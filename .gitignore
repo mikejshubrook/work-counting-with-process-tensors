@@ -1,0 +1,22 @@
+# Ignore all data files and folders (user/output data)
+data/
+
+# Ignore Python bytecode cache
+__pycache__/
+*.py[cod]
+
+# Ignore shell script backups or temporary files
+*.swp
+*.swo
+*~
+
+# Ignore virtual environments (if any)
+venv/
+.env/
+.venv/
+
+# Ignore log files
+*.log
+
+# Ignore Jupyter checkpoint files (if you use notebooks later)
+.ipynb_checkpoints/
