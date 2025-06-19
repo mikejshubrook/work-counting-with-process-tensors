@@ -4,8 +4,8 @@
 export OMP_NUM_THREADS=4
 
 ### Numerical parameters ###
-export STEP_SIZE=0.01 # Trotter step size, must be tested for convergence
-export PREC=9.0 # precision: 10^-{p} is the SVD threshold, must be tested for convergence
+export STEP_SIZE=0.005 # Trotter step size, must be tested for convergence
+export PREC=7.0 # precision: 10^-{p} is the SVD threshold, must be tested for convergence
 
 ### Bath parameters - required for IF.py, dynamics.py and moments.py ###
 export BETA=1 # inverse temperature
