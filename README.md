@@ -81,7 +81,7 @@ These are broken down into system, bath, and shared parameters.
 These parameters are used elsewhere in the project's code:
 
 * **`S`** (float): Equilibration time. This is used to perform the first measurement within the TPMP and must be chosen large enough to achieve converged results.
-* **`M`** (int): Counting integer, used to calculate the WCF along the chi axis in units of $M \times$STEP_SIZE.
+* **`M`** (int): Counting integer, used to calculate the WCF along the chi axis in units of $M \times$ STEP_SIZE.
 * **`MAX_DIFF_ORDER`** (int): Used when calculating moments through the finite difference approximation to achieve higher-order accuracy. This should be an integer and a multiple of 2.
 
 ---
