@@ -29,7 +29,7 @@ STEP_SIZE  = float(os.environ['STEP_SIZE'])  # step size for generalised time ax
 EPSMAX = float(os.environ['EPSMAX'])         # maximum energy splitting
 EPS0 = float(os.environ['EPS0'])             # minimum energy splitting
 TP = float(os.environ['TP'])                 # protocol time (tp)
-STA = int(os.environ['STA'])                 # = 1 for STA, = 0 for no STA
+# STA = int(os.environ['STA'])                 # = 1 for STA, = 0 for no STA
 N=1
 shift=True
 
@@ -49,35 +49,38 @@ M_TOTAL = int(os.environ['M_TOTAL']) # number of steps along chi to take - what 
 CHI0 = MSTART*STEP_SIZE
 CHI_F =  (MSTART+M_TOTAL)*STEP_SIZE
 
-# Define folder name to grab files from
-# Define folder name to grab files from
-folder = os.path.join(
-    DATA_DIR,
-    f"WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}",
-    f"chi{MSTART * STEP_SIZE}"
-)
-# List of file names to extract data from
-file_names = [f"{folder}/wcf_m{m}.npy" for m in range(MSTART, MSTART+(M_TOTAL+1))] #TODO does this need the +1?
 
-# Output file where the combines data 
-output_file = f"{WCF_DIR}/WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_t{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}_X{CHI0}_Xf{CHI_F}.txt"
+for STA in [0, 1]:
+    sta = (STA == 1)
 
-# Open the output file in write mode
-with open(output_file, 'w') as f_out:
-    # Loop through each file
-    for file_name in file_names:
-        if os.path.exists(file_name):
-            
-            # Load the complex number from the .npy file
-            complex_number = np.load(file_name)  # Assumes the file contains a single complex number
-            
-            # Check if it's indeed a complex number (optional but useful for error handling)
-            if np.iscomplexobj(complex_number):
-                real, imag = complex_number.real, complex_number.imag  # Extract real and imaginary parts
-                print(file_name, real, imag)
-                f_out.write(f"{real}\t{imag}\n")  # Write the complex number parts to the output file
-        else:
-            print(f"File {file_name} does not exist. Skipping.")
+    # Define folder name to grab files from
+    folder = os.path.join(
+        DATA_DIR,
+        f"WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}",
+        f"chi{MSTART * STEP_SIZE}"
+    )
+    # List of file names to extract data from
+    file_names = [f"{folder}/wcf_m{m}.npy" for m in range(MSTART, MSTART+(M_TOTAL+1))] #TODO does this need the +1?
 
-print(f"All data has been successfully combined into {output_file}.")
+    # Output file where the combines data 
+    output_file = f"{WCF_DIR}/WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_t{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}_X{CHI0}_Xf{CHI_F}.txt"
+
+    # Open the output file in write mode
+    with open(output_file, 'w') as f_out:
+        # Loop through each file
+        for file_name in file_names:
+            if os.path.exists(file_name):
+                
+                # Load the complex number from the .npy file
+                complex_number = np.load(file_name)  # Assumes the file contains a single complex number
+                
+                # Check if it's indeed a complex number (optional but useful for error handling)
+                if np.iscomplexobj(complex_number):
+                    real, imag = complex_number.real, complex_number.imag  # Extract real and imaginary parts
+                    print(file_name, real, imag)
+                    f_out.write(f"{real}\t{imag}\n")  # Write the complex number parts to the output file
+            else:
+                print(f"File {file_name} does not exist. Skipping.")
+
+    print(f"All data has been successfully combined into {output_file}.")
 

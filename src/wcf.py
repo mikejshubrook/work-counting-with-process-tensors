@@ -30,7 +30,7 @@ STEP_SIZE  = float(os.environ['STEP_SIZE'])  # step size for generalised time ax
 EPSMAX = float(os.environ['EPSMAX'])         # maximum energy splitting
 EPS0 = float(os.environ['EPS0'])             # minimum energy splitting
 TP = float(os.environ['TP'])               # protocol time
-STA = int(os.environ['STA'])                 # =1 for shortcut to adiabaticity, =0 for no shortcut
+# STA = int(os.environ['STA'])                 # =1 for shortcut to adiabaticity, =0 for no shortcut
 
 # bath parameters
 ALPHA = float(os.environ['ALPHA'])           # system-bath coupling strength
@@ -58,55 +58,55 @@ eps0 = EPS0 * epstau
 wc = WC * BETA
 tau = TP
 
-if STA ==1:
-    sta=True
-else:
-    sta=False
-
-# define initial state (maximally mixed state)
-H = H_ERASURE(0, tau, eps0, epstau, N, shift, sta)
-evecs = np.linalg.eigh(H)[1]
-Rho_0 = 0.5 * (np.outer(evecs[:, 0], evecs[:, 0].conj()) + np.outer(evecs[:, 1], evecs[:, 1].conj()))
-
-# define steps along generalised time axis
-s = int(S/STEP_SIZE) # equilibration
-f = int(tau/STEP_SIZE) # time propagation
 
 
-# define filename of influence functional
-filename = os.path.join(IF_DIR, f'IF_a{ALPHA}_G{GAMMA}_w{W0}_dt{STEP_SIZE}_p{PREC}.pkl')
+for STA in [0, 1]:
+    sta = (STA == 1)
 
-# load IF
-with open(filename, 'rb') as file:
-    itebd = pickle.load(file)
+    # define initial state (maximally mixed state)
+    H = H_ERASURE(0, tau, eps0, epstau, N, shift, sta)
+    evecs = np.linalg.eigh(H)[1]
+    Rho_0 = 0.5 * (np.outer(evecs[:, 0], evecs[:, 0].conj()) + np.outer(evecs[:, 1], evecs[:, 1].conj()))
+
+    # define steps along generalised time axis
+    s = int(S/STEP_SIZE) # equilibration
+    f = int(tau/STEP_SIZE) # time propagation
 
 
-for m in range(MSTART, MSTART + M):
-    # print progress
-    print(f"Processing m = {m}...")
-    # calculate the WCF for this m
-    wcf = process_iteration(itebd, s, f, m, Rho_0, STEP_SIZE, tau, eps0, epstau, N, shift, sta)
-    print(wcf)
+    # define filename of influence functional
+    filename = os.path.join(IF_DIR, f'IF_a{ALPHA}_G{GAMMA}_w{W0}_dt{STEP_SIZE}_p{PREC}.pkl')
 
-    # # Define folder and file name
-    # folder = f"wcf-files/WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}/chi{MSTART*STEP_SIZE}"
-    # file_name = f"{folder}/wcf_m{m}.npy"
+    # load IF
+    with open(filename, 'rb') as file:
+        itebd = pickle.load(file)
 
-    # Construct folder path using os.path.join
-    folder = os.path.join(
-        DATA_DIR,
-        f"WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}",
-        f"chi{MSTART*STEP_SIZE}"
-    )
 
-    # Make sure the folder exists
-    os.makedirs(folder, exist_ok=True)
+    for m in range(MSTART, MSTART + M):
+        # print progress
+        print(f"Processing m = {m}...")
+        # calculate the WCF for this m
+        wcf = process_iteration(itebd, s, f, m, Rho_0, STEP_SIZE, tau, eps0, epstau, N, shift, sta)
+        print(wcf)
 
-    # Construct the full file path
-    file_name = os.path.join(folder, f"wcf_m{m}.npy")
+        # # Define folder and file name
+        # folder = f"wcf-files/WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}/chi{MSTART*STEP_SIZE}"
+        # file_name = f"{folder}/wcf_m{m}.npy"
 
-    # Save as .npy
-    np.save(file_name, wcf)
-    print(f"WCF saved to {file_name}")
+        # Construct folder path using os.path.join
+        folder = os.path.join(
+            DATA_DIR,
+            f"WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}",
+            f"chi{MSTART*STEP_SIZE}"
+        )
+
+        # Make sure the folder exists
+        os.makedirs(folder, exist_ok=True)
+
+        # Construct the full file path
+        file_name = os.path.join(folder, f"wcf_m{m}.npy")
+
+        # Save as .npy
+        np.save(file_name, wcf)
+        print(f"WCF saved to {file_name}")
 
 
