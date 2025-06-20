@@ -13,6 +13,12 @@ import dill as pickle
 # Third-party imports
 import numpy as np
 
+# Get the directory of the current script (workflow)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# Get the parent directory (src)
+src_dir = os.path.dirname(current_dir)
+# Add src to sys.path
+sys.path.append(src_dir)
 # Local imports
 from utils.LandauerErasure_functions import *
 
@@ -22,7 +28,6 @@ PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_FILE, "../../"))
 
 # Convenience: path to data folder
 DATA_DIR = os.path.join(PROJECT_ROOT, "data", "InfluenceFunctionals")
-
 
 # import numerical parameters from BASH
 STEP_SIZE  = float(os.environ['STEP_SIZE'])  # step size for generalised time axis (trotter step)
@@ -38,7 +43,6 @@ WC = float(os.environ['WC'])                 # cutoff frequency
 alpha_str = os.environ.get("ALPHA_LIST", "")
 alpha_values = [float(x) for x in alpha_str.split()]
 print("Alpha values:", alpha_values)
-
 
 # define parameters for the influence functional (which are independent of alpha)
 # TODO: it might be better to define these in the bash script so they are easily adjustable

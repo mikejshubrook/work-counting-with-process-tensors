@@ -25,6 +25,6 @@ export NTH_ORDER_DERIV=4 # number of derivatives to compute
 export MAX_DIFF_ORDER=4 # maximum order of the finite difference approximation for derivatives
 
 # Run scripts
-python ../src/IF.py
-python ../src/dynamics.py
+python ../src/workflow/IF.py
+python ../src/workflow/dynamics.py
 python dynamics-test.py

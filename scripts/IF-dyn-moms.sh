@@ -4,7 +4,7 @@
 export OMP_NUM_THREADS=4
 
 ### Numerical parameters ###
-export STEP_SIZE=0.005 # Trotter step size, must be tested for convergence
+export STEP_SIZE=0.01 # Trotter step size, must be tested for convergence
 export PREC=7.0 # precision: 10^-{p} is the SVD threshold, must be tested for convergence
 
 ### Bath parameters - required for IF.py, dynamics.py and moments.py ###
@@ -24,6 +24,6 @@ export S=1 # equilibration time, must be tested for convergence
 export MAX_DIFF_ORDER=12 # maximum order of the finite difference approximation for derivatives
 
 # Run scripts - comment out those that are not needed
-python ../src/IF.py
-python ../src/dynamics.py
-python ../src/moments.py
+python ../src/workflow/IF.py
+python ../src/workflow/dynamics.py
+python ../src/workflow/moments.py

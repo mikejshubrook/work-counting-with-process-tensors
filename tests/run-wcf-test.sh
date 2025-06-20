@@ -25,6 +25,6 @@ export EPSMAX=25.0 # maximum energy of the system
 export EPS0=0.02 # minimum energy of the system
 
 # Run scripts
-python ../src/wcf.py
-python ../src/wcf-combine.py
+python ../src/workflow/wcf.py
+python ../src/workflow/wcf-combine.py
 python wcf-test.py

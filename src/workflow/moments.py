@@ -23,6 +23,7 @@
 
 # Standard library imports
 import os
+import sys
 import pickle
 import dill as pickle
 
@@ -30,6 +31,12 @@ import dill as pickle
 import numpy as np
 import pandas as pd
 
+# Get the directory of the current script (workflow)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# Get the parent directory (src)
+src_dir = os.path.dirname(current_dir)
+# Add src to sys.path
+sys.path.append(src_dir)
 # Local imports
 from utils.LandauerErasure_functions import *
 
