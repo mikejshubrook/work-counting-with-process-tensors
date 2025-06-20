@@ -17,10 +17,10 @@ export BETA=1 # inverse temperature
 export GAMMA=10.0 # spectral densit width
 export W0=25.0 # spectral density peak location
 export WC=5 # spectral density cutoff
-export ALPHA=0.01 # coupling strength list, can be a single value or multiple values separated by spaces
+export ALPHA_LIST="0.01" # coupling strength list, can be a single value or multiple values separated by spaces
 
 ### System parameters ###
-export TP=1.0 # list of protocol times, can be a single value or multiple values separated by spaces
+export TP_LIST="1" # list of protocol times, can be a single value or multiple values separated by spaces
 export EPSMAX=25.0 # maximum energy of the system
 export EPS0=0.02 # minimum energy of the system
 

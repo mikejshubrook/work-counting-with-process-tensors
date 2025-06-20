@@ -20,11 +20,14 @@ if __name__ == "__main__":
     # system hamiltonian parameters
     EPSMAX = float(os.environ['EPSMAX'])         # maximum energy splitting
     EPS0 = float(os.environ['EPS0'])             # minimum energy splitting
-    TP = float(os.environ['TP'])               # protocol time
-    # STA = int(os.environ['STA'])                 # =1 for shortcut to adiabaticity, =0 for no shortcut
+    tp_str = os.environ.get("TP_LIST", "")
+    tp_values = [float(x) for x in tp_str.split()]
+    TP = tp_values[0]                            # time point for the WCF
 
     # bath parameters
-    ALPHA = float(os.environ['ALPHA'])           # system-bath coupling strength
+    alpha_str = os.environ.get("ALPHA_LIST", "")
+    alpha_values = [float(x) for x in alpha_str.split()]
+    ALPHA= alpha_values[0]
     GAMMA = float(os.environ['GAMMA'])           # width of spectral density
     W0 = float(os.environ['W0'])                 # peak location
     BETA = float(os.environ['BETA'])             # inverse temperature

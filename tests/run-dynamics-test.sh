@@ -19,7 +19,7 @@ export TP_LIST="1" # list of protocol times, can be a single value or multiple v
 export EPSMAX=25.0 # maximum energy of the system
 export EPS0=0.02 # minimum energy of the system
 
-### Moments parameters, only required for moments.py ###
+### Moments parameters, onlbashy required for moments.py ###
 export S=1 # equilibration time, must be tested for convergence
 export NTH_ORDER_DERIV=4 # number of derivatives to compute
 export MAX_DIFF_ORDER=4 # maximum order of the finite difference approximation for derivatives
