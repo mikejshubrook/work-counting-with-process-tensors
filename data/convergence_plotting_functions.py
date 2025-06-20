@@ -25,54 +25,63 @@ def plot_dynamics_convergence(alpha, tp, dt_list, p_list, sta_list=[0,1]):
                 dfs[(dt, p, sta)] = pd.read_csv(f'dynamics-files/dyns-a{alpha}_G10.0_w25.0_e25.0_tp{tp}_sta{sta}_dt{dt}_p{p}.csv')
          
     # Create figure with three subplots
-    fig, ax = plt.subplots(2, 2, figsize=(10, 6))
+    fig, ax = plt.subplots(3, 2, figsize=(15, 8))  # match WCF size
+    sta_markers = ['o', 's']
 
     # choose integers for slicing (n=0, m=-1 for the whole range)
     n = 0
     m = -1
-    
+    fnt=12 # fontsize
+    ms = 0 # markersize
     # NO STA
-    # Plot coherence
+    # Plot magnetization
     for i, dt in enumerate(dt_list):
         for j, p in enumerate(p_list):
             for sta in sta_list:
-                ax[0,sta].plot(dfs[(dt,p, sta)]['tlist'][n:m], dfs[(dt,p, sta)]['coh'][n:m],
-                        label=f'dt={dt}, p={p}',
-                        color=colors[i],
-                        linestyle=linestyles[j])
+                ax[0,sta].plot(dfs[(dt,p, sta)]['tlist'][n:m], dfs[(dt,p, sta)]['mag'][n:m],
+               label=f'dt={dt}, p={p}',
+               color=colors[i],
+               linestyle=linestyles[j],
+               marker=sta_markers[sta],
+               markersize=ms)
 
-    ax[0,0].set_ylabel('Coherence')
-    ax[0,0].legend(ncol=2, fontsize=6)    
-    ax[0,1].set_ylabel('Coherence')
-    ax[0,1].legend(ncol=2, fontsize=6)
+    ax[0,0].set_ylabel('Magnetization', fontsize=fnt)
+    ax[0,1].set_ylabel('Magnetization', fontsize=fnt)
+
+        # Plot coherence
+    for i, dt in enumerate(dt_list):
+        for j, p in enumerate(p_list):
+            for sta in sta_list:
+                ax[1,sta].plot(dfs[(dt,p, sta)]['tlist'][n:m], dfs[(dt,p, sta)]['coh'][n:m],
+               label=f'dt={dt}, p={p}',
+               color=colors[i],
+               linestyle=linestyles[j],
+               marker=sta_markers[sta],
+               markersize=ms)
+
+    ax[1,0].set_ylabel('Coherence', fontsize=fnt)
+    ax[1,1].set_ylabel('Coherence', fontsize=fnt)
 
     # Plot overlap_target
     for i, dt in enumerate(dt_list):
         for j, p in enumerate(p_list):
             for sta in sta_list:
-                ax[1, sta].plot(dfs[(dt,p, sta)]['tlist'][n:m], dfs[(dt,p, sta)]['overlap_target'][n:m],
-                        label=f'dt={dt}, p={p}',
-                        color=colors[i],
-                        linestyle=linestyles[j])
-    ax[1,0].set_xlabel('Time')
-    ax[1,0].set_ylabel('Overlap Target')
-    ax[1,0].legend(ncol=2, fontsize=6)
+                ax[2, sta].plot(dfs[(dt,p, sta)]['tlist'][n:m], dfs[(dt,p, sta)]['overlap_target'][n:m],
+               label=f'dt={dt}, p={p}',
+               color=colors[i],
+               linestyle=linestyles[j],
+               marker=sta_markers[sta],
+               markersize=ms)
+    ax[2,0].set_ylabel('Overlap Target', fontsize=fnt)
+    ax[2,1].set_ylabel('Overlap Target', fontsize=fnt)
+
+    for axes in ax.flat:
+        axes.legend(ncol=2, fontsize=fnt)
+        axes.set_xlabel('Time', fontsize=fnt)
+
+    ax[0,0].set_title('RAW')
+    ax[0,1].set_title('STA')
     
-    ax[1,1].set_xlabel('Time')
-    ax[1,1].set_ylabel('Overlap Target')
-    ax[1,1].legend(ncol=2, fontsize=6)
-
-
-    ax[0,0].set_ylim(-0.1, 1.1)
-    ax[1,0].set_ylim(-0.1, 1.1)
-    ax[0,1].set_ylim(-0.1, 1.1)
-    ax[1,1].set_ylim(-0.1, 1.1)
-
-    ax[0,0].set_title('No STA')
-    ax[0,1].set_title('With STA')
-    
-    ax[1,0].axhline(1, color='black', linestyle='--', linewidth=0.5)
-    ax[1,1].axhline(1, color='black', linestyle='--', linewidth=0.5)
     plt.suptitle(f'Convergence tests for dynamics: alpha={alpha}, tp={tp}', fontsize=16)
     plt.tight_layout()
     plt.show()
@@ -103,6 +112,8 @@ def plot_convergence_moments(alpha, tp, dt_list, p_list, s, sta_list=[0,1]):
     # choose integers for slicing (n=0, m=-1 for the whole range)
     n = 0
     m = -1
+    fnt=12 # fontsize
+    ms = 0 # markersize
 
     # Get the length of moments data...
     n = len(dfs[(dt, p, sta)]['mean_real'][1::2])
@@ -110,7 +121,7 @@ def plot_convergence_moments(alpha, tp, dt_list, p_list, s, sta_list=[0,1]):
     orders = [2 * i for i in range(1, n + 1)]
 
     # Create figure with three subplots
-    fig, ax = plt.subplots(3, 2, figsize=(15, 12))
+    fig, ax = plt.subplots(3, 2, figsize=(15, 8))
 
     # Mean
     for i, dt in enumerate(dt_list):
@@ -121,8 +132,8 @@ def plot_convergence_moments(alpha, tp, dt_list, p_list, s, sta_list=[0,1]):
                         label=f'dt={dt}, p={p}',
                         color=colors[i],
                         linestyle=linestyles[j])
-    ax[0,0].set_ylabel('Mean')
-    ax[0,1].set_ylabel('Mean')          
+    ax[0,0].set_ylabel('Mean', fontsize=fnt)
+    ax[0,1].set_ylabel('Mean', fontsize=fnt)          
         # variance
     for i, dt in enumerate(dt_list):
         for j, p in enumerate(p_list):
@@ -132,8 +143,8 @@ def plot_convergence_moments(alpha, tp, dt_list, p_list, s, sta_list=[0,1]):
                         label=f'dt={dt}, p={p}',
                         color=colors[i],
                         linestyle=linestyles[j])
-    ax[1,0].set_ylabel('Variance')
-    ax[1,1].set_ylabel('Variance')            
+    ax[1,0].set_ylabel('Variance', fontsize=fnt)
+    ax[1,1].set_ylabel('Variance', fontsize=fnt)            
         # Mean
     for i, dt in enumerate(dt_list):
         for j, p in enumerate(p_list):
@@ -143,11 +154,15 @@ def plot_convergence_moments(alpha, tp, dt_list, p_list, s, sta_list=[0,1]):
                         label=f'dt={dt}, p={p}',
                         color=colors[i],
                         linestyle=linestyles[j])
-    ax[2,0].set_ylabel('Skewness')
-    ax[2,1].set_ylabel('Skewness')            
+    ax[2,0].set_ylabel('Skewness', fontsize=fnt)
+    ax[2,1].set_ylabel('Skewness', fontsize=fnt)            
+    
+    ax[0,0].set_title('RAW')
+    ax[0,1].set_title('STA')
+    
     for axes in ax.flat:
-        axes.set_xlabel('Finite Difference Order')        
-        axes.legend(ncol=len(dt_list), fontsize=12)
+        axes.set_xlabel('Finite Difference Order', fontsize=fnt)        
+        axes.legend(ncol=len(dt_list), fontsize=fnt)
 
     plt.suptitle(f'Convergence tests for moments: alpha={alpha}, tp={tp}', fontsize=16)
     plt.tight_layout()
@@ -179,6 +194,7 @@ def plot_convergence_wcf(alpha, tp, dt_list, p_list, s, X0, Xf, sta_list=[0,1]):
     # choose integers for slicing (n=0, m=-1 for the whole range)
     n = 0
     m = -1
+    fnt=12
     sta_markers = ['o', 's']
     chis = {}
     for dt in dt_list:
@@ -193,26 +209,28 @@ def plot_convergence_wcf(alpha, tp, dt_list, p_list, s, X0, Xf, sta_list=[0,1]):
             for sta in sta_list:
                 ax[0, sta].plot(chis[dt], wcfs[(dt,p, sta)][0],
                         marker=sta_markers[sta],
-                        label=f'dt={dt}, p={p}, sta={sta}',
+                        label=f'dt={dt}, p={p}',
                         color=colors[i],
                         linestyle=linestyles[j])
-    ax[0,0].set_ylabel('Real')
-    ax[0,1].set_ylabel('Real')
+    ax[0,0].set_ylabel('Real WCF', fontsize=fnt)
+    ax[0,1].set_ylabel('Real WCF', fontsize=fnt)
         # variance
     for i, dt in enumerate(dt_list):
         for j, p in enumerate(p_list):
             for sta in sta_list:
                 ax[1, sta].plot(chis[dt], wcfs[(dt,p, sta)][1],
                         marker=sta_markers[sta],
-                        label=f'dt={dt}, p={p}, sta={sta}',
+                        label=f'dt={dt}, p={p}',
                         color=colors[i],
                         linestyle=linestyles[j])
-    ax[1,0].set_ylabel('Imag')
-    ax[1,1].set_ylabel('Imag')
-         
+    ax[1,0].set_ylabel('Imag  WCF', fontsize=fnt)
+    ax[1,1].set_ylabel('Imag  WCF', fontsize=fnt)
+    ax[0,0].set_title('RAW')
+    ax[0,1].set_title('STA')
+    
     for axes in ax.flat:
-        axes.set_xlabel('Counting parameter')        
-        axes.legend(ncol=len(dt_list), fontsize=12)
+        axes.set_xlabel('Counting parameter', fontsize=fnt)        
+        axes.legend(ncol=len(dt_list), fontsize=fnt)
 
     plt.suptitle(f'Convergence tests for WCF: alpha={alpha}, tp={tp}', fontsize=16)
     plt.tight_layout()
