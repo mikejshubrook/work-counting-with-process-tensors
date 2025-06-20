@@ -12,7 +12,6 @@ from ncon import ncon  # Efficient tensor contraction
 from utils.operators import spre, spost, sprepost, lind
 from utils.bath_functions import BathCorrelation
 
-
 def tanh_cutoff(b, t, x):
     return (t - b) / 2 + b -  np.tanh(x - 2.5) * (t - b) / 2
 
@@ -69,7 +68,6 @@ def iTEBD_apply_gate(gate: np.ndarray,
         # chi = min(rank, len(s_vals), rank_rtol)
         chi = (s_vals>rtol*np.max(s_vals)).sum()
     
-
     u = u[:, :chi].reshape(sBA.shape[0], d1 * chi)
     v = v[:chi, :].reshape(chi * d2, rank_BA)
 
@@ -81,9 +79,6 @@ def iTEBD_apply_gate(gate: np.ndarray,
     sAB = s_vals[:chi]
 
     return A, sAB, B, sBA
-
-
-
 
 class iTEBD_TEMPO():
     """ A class to compute and approximate the influence functional using iTEBD-TEMPO and compute dynamics. """

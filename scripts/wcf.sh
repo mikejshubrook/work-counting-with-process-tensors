@@ -1,5 +1,10 @@
 #!/bin/bash 
 
+# This script allows the user to calculate the work characteristic function (WCF) for a given set of physical and numerical parameters.
+# First, the influence functional is calculated, then the work characteristic function data points, and finally these data points combined.
+# This is an artefact of the worflow, that was developed to run on HPC in parallel.
+
+
 # Set number of threads (adjust to your CPU)
 export OMP_NUM_THREADS=4
 
@@ -12,11 +17,8 @@ export STEP_SIZE=0.005 # Trotter step size, must be tested for convergence
 export PREC=7.0 # precision: 10^-{p} is the SVD threshold, must be tested for convergence
 
 
-# Choose maximum chi value
+# Choose maximum value of the counting paramter chi
 X=0.5
-
-### Numerical parameters ###
-export STEP_SIZE=0.005 # Trotter step size, must be tested for convergence
 
 # Calculate M = X / STEP_SIZE, as an integer
 export M=$(printf "%.0f" $(echo "$X / $STEP_SIZE" | bc -l)) # number of counting integers to calculate
@@ -33,7 +35,7 @@ export TP_LIST="1 2 3" # list of protocol times, can be a single value or multip
 export EPSMAX=25.0 # maximum energy of the system
 export EPS0=0.02 # minimum energy of the system
 
-# Run scripts - comment out those that are not needed
+# Run py files
 python ../src/workflow/IF.py
 python ../src/workflow/wcf.py
 python ../src/workflow/wcf-combine.py

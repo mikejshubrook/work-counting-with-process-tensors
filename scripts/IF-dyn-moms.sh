@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# This script allows the user to calculate system dynamics and work moments for a given set of physical and numerical parameters.
+# First, the influence functional is calculated, then the system dynamics, and finally the work moments.
+
 # Set number of threads (adjust to your CPU)
 export OMP_NUM_THREADS=4
 
@@ -23,7 +26,7 @@ export EPS0=0.02 # minimum energy of the system
 export S=1 # equilibration time, must be tested for convergence
 export MAX_DIFF_ORDER=12 # maximum order of the finite difference approximation for derivatives
 
-# Run scripts - comment out those that are not needed
+# Run py files
 python ../src/workflow/IF.py
 python ../src/workflow/dynamics.py
 python ../src/workflow/moments.py

@@ -52,12 +52,12 @@ To ensure everything is set up correctly, run the following tests:
 
 ## List of Parameters
 
-This project utilizes two primary categories of parameters: **physical parameters** and **numerical parameters**.
+This project requires two categories of parameters: **physical parameters** and **numerical parameters**.
 
 * **Physical parameters** describe the system you are simulating, such as energy scales and time.
-* **Numerical parameters** control how the simulation is performed, including the time step and SVD threshold.
+* **Numerical parameters** control how the simulation is performed, including the time step, SVD threshold, and order of finite difference approximations.
 
-The goal is to achieve **convergence** of the results with respect to the numerical parameters for a given set of physical parameters. When convergence is achieved, it indicates that the results are robust and not artifacts of the simulation method.
+The goal is to achieve **convergence** of the results with respect to the numerical parameters for a given set of physical parameters. When convergence is achieved, it indicates that the results are robust and not artifacts of the simulation method, but rather of the physical system being simulated.
 
 Below is a breakdown of the physical and numerical parameters used in the bash scripts. Descriptions of other parameters used elsewhere in the project can be found in their respective files.
 
@@ -69,7 +69,7 @@ These are broken down into system, bath, and shared parameters.
 
 * **`EPSMAX`** (float): Maximum energy splitting of the TLS.
 * **`EPS0`** (float): Minimum energy splitting of the TLS.
-* **`TP`** (float): Protocol time, representing the duration for which the TLS is driven.
+* **`TP`** (float): Protocol time, representing the duration for which the TLS is driven by the time depenendent Hamiltonian.
 
 #### Bath Parameters:
 
@@ -77,21 +77,20 @@ These are broken down into system, bath, and shared parameters.
 * **`BETA`** (float): Inverse temperature. This serves as the base unit for all other parameters.
 * **`GAMMA`** (float): Width of the spectral density.
 * **`W0`** (float): Peak location of the spectral density.
-* **`WC`** (float): Cutoff for the spectral density.
+* **`WC`** (float): Cutoff for the spectral density. TODO: explain the type of cutoff used.
 * **`ALPHA`** (float): Coupling strength between the system and bath.
 
 ### Numerical Parameters (Simulation Parameters)
 
 * **`STEP_SIZE`**: Trotter step size, used for the discretization of the generalized time axis.
 * **`PREC`**: Threshold for Singular Value Decomposition (SVD), expressed in units of $10^{-\text{PREC}}$.
+* **`MAX_DIFF_ORDER`** (int): Used when calculating moments through the finite difference approximation to achieve higher-order accuracy. This should be an integer and a multiple of 2.
+* **`S`** (float): Equilibration time. This is used to perform the first measurement within the TPMP and must be chosen large enough to achieve converged results.
 
 ### Other Parameters
 
 These parameters are used elsewhere in the project's code:
-
-* **`S`** (float): Equilibration time. This is used to perform the first measurement within the TPMP and must be chosen large enough to achieve converged results.
 * **`M`** (int): Counting integer, used to calculate the WCF along the chi axis in units of $M \times$ STEP_SIZE.
-* **`MAX_DIFF_ORDER`** (int): Used when calculating moments through the finite difference approximation to achieve higher-order accuracy. This should be an integer and a multiple of 2.
 
 ---
 

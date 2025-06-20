@@ -8,8 +8,6 @@ from scipy.interpolate import interp1d
 from tqdm import tqdm  
 import matplotlib.pyplot as plt  
 
-
-
 class BathCorrelation():
     """Class to represent and manipulate the bath correlation function."""
 
@@ -27,7 +25,6 @@ class BathCorrelation():
         """
         self.bcf = bcf
         self.time_cutoff = np.inf
-
 
     def construct_bath_correlation(self, 
                                    Spectral_Function: Callable[[float], float],
