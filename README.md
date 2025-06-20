@@ -100,3 +100,10 @@ These parameters are used elsewhere in the project's code:
 I've created video tutorials on my YouTube channel that explain both how the code works and how to use it. Please visit the following link to see the playlist of videos associated with this project:
 
 (link to playlist)
+
+
+## References
+This project made use of the code written by Valentin Link which performs the calculations to calculate the influence functional. 
+Here is a link to the paper that the work is based upon: https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.132.200403
+Here is a link to his github repo: https://github.com/val-link/iTEBD-TEMPO
+
