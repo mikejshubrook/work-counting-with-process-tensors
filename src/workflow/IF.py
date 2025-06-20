@@ -13,13 +13,10 @@ import dill as pickle
 # Third-party imports
 import numpy as np
 
-# Get the directory of the current script (workflow)
-current_dir = os.path.dirname(os.path.abspath(__file__))
-# Get the parent directory (src)
-src_dir = os.path.dirname(current_dir)
-# Add src to sys.path
-sys.path.append(src_dir)
 # Local imports
+current_dir = os.path.dirname(os.path.abspath(__file__)) # Get the directory of the current script (workflow)
+src_dir = os.path.dirname(current_dir) # Get the parent directory (src)
+sys.path.append(src_dir) # Add src to sys.path
 from utils.LandauerErasure_functions import *
 
 # Get absolute path to project root (2 levels up from this file)
@@ -31,7 +28,7 @@ DATA_DIR = os.path.join(PROJECT_ROOT, "data", "InfluenceFunctionals")
 
 # import numerical parameters from BASH
 STEP_SIZE  = float(os.environ['STEP_SIZE'])  # step size for generalised time axis (trotter step)
-PREC  = float(os.environ['PREC'])            # precision (threshold for SVD)
+PREC  = float(os.environ['PREC'])            # precision (threshold for SVD)kjz     
 
 # import physical parameters from BASH
 GAMMA = float(os.environ['GAMMA'])           # width of spectral density
@@ -45,8 +42,7 @@ alpha_values = [float(x) for x in alpha_str.split()]
 print("Alpha values:", alpha_values)
 
 # define parameters for the influence functional (which are independent of alpha)
-# TODO: it might be better to define these in the bash script so they are easily adjustable
-
+# TODO: it might be better to define these in the bash script so they are easily adjustablekk
 hard_freq_cutoff = W0*WC                # hard cutoff for frequency integrals
 T_max = 5                               # bath memory time
 d = 3                                   # regularizing function gradient

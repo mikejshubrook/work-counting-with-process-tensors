@@ -4,19 +4,23 @@ import scipy as sc
 
 
 def spre(op):
+    """ Superoperator for the left action (pre) of an operator on a density matrix. """
     return np.kron(op, np.eye(op.shape[0]))
 
 
 def spost(op):
+    """ Superoperator for the right action (post) of an operator on a density matrix. """
     return np.kron(np.eye(op.shape[0]), op.T)
 
 
 def sprepost(A, B):
+    """ Superoperator for the left action of A and the right action of B on a density matrix. """
     #the Liouville space representation of A.R.B
     return np.kron(A, B.T)
 
 
 def lind(op):
+    """ Returns the Lindblad superoperator for a given operator `op`. """
     super_op = 2 * sprepost(op,op.T.conj())                        
     super_op -= spre(op.T.conj()@op)
     super_op -= spost(op.T.conj()@op)
@@ -24,6 +28,7 @@ def lind(op):
 
 
 def coth(x):
+    """ Computes the hyperbolic cotangent of x, handling divergence. """
     try:
         val = np.cosh(x)/np.sinh(x)
     except RuntimeWarning:
@@ -46,12 +51,15 @@ def scipy_compress(A, prec):
 
 
 def sz():
+    """ Returns the Pauli Z operator. """
     return np.array([[1,0],[0,-1]],dtype=np.complex128)
 
 def sx():
+    """ Returns the Pauli X operator. """
     return np.array([[0,1],[1,0]],dtype=np.complex128)
 
 def sy():
+    """ Returns the Pauli Y operator. """
     return np.array([[0,-1j],[1j,0]],dtype=np.complex128)
 
 
