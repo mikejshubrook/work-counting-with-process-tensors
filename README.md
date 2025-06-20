@@ -104,6 +104,6 @@ I've created video tutorials on my YouTube channel that explain both how the cod
 
 ## References
 This project made use of the code written by Valentin Link which performs the calculations to calculate the influence functional. 
-Here is a link to the paper that the work is based upon: https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.132.200403
-Here is a link to his github repo: https://github.com/val-link/iTEBD-TEMPO
+* Here is a link to the paper that the work is based upon: https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.132.200403
+* Here is a link to his github repo: https://github.com/val-link/iTEBD-TEMPO
 
