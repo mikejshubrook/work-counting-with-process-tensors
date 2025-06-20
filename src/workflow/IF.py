@@ -24,7 +24,7 @@ from utils.LandauerErasure_functions import *
 
 # Get absolute path to project root (2 levels up from this file)
 CURRENT_FILE = os.path.abspath(__file__)
-PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_FILE, "../../"))
+PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_FILE, "../../../"))
 
 # Convenience: path to data folder
 DATA_DIR = os.path.join(PROJECT_ROOT, "data", "InfluenceFunctionals")

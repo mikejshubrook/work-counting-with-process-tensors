@@ -8,7 +8,7 @@ import findiff
 # Local imports
 from utils.WC_TEMPO import time_dependent_TEMPO
 from utils.bath_functions import BathCorrelation
-from utils.utils import sz, sy, sx, spre, spost
+from utils.operators import sz, sy, sx, spre, spost
 
 
 #################### CREATE INFLUENCE FUNCTIONAL WITH ITEBD ####################

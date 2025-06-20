@@ -14,7 +14,7 @@ import numpy as np
 
 # Path handling for reliable file saving/loading
 CURRENT_FILE = os.path.abspath(__file__)
-PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_FILE, "../../"))  # Adjust based on your layout
+PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_FILE, "../../../"))  # Adjust based on your layout
 
 DATA_DIR = os.path.join(PROJECT_ROOT, "data", "wcf-files")
 WCF_DIR = os.path.join(PROJECT_ROOT, "data", "wcf-files-combined")
@@ -28,13 +28,13 @@ STEP_SIZE  = float(os.environ['STEP_SIZE'])  # step size for generalised time ax
 # system hamiltonian parameters
 EPSMAX = float(os.environ['EPSMAX'])         # maximum energy splitting
 EPS0 = float(os.environ['EPS0'])             # minimum energy splitting
-TP = float(os.environ['TP'])                 # protocol time (tp)
-# STA = int(os.environ['STA'])                 # = 1 for STA, = 0 for no STA
 N=1
 shift=True
 
 # bath parameters
-ALPHA = float(os.environ['ALPHA'])           # coupling strength
+# extract alpha values from ALPHA_LIST
+alpha_str = os.environ.get("ALPHA_LIST", "")
+alpha_values = [float(x) for x in alpha_str.split()]
 GAMMA = float(os.environ['GAMMA'])           # width of spectral density
 W0 = float(os.environ['W0'])                 # peak location
 BETA = float(os.environ['BETA'])             # inverse temperature
@@ -49,38 +49,43 @@ M = int(os.environ['M']) # number of steps along chi to take - what was the size
 CHI0 = MSTART*STEP_SIZE
 CHI_F =  (MSTART+M)*STEP_SIZE
 
+# extract tau values from TAU_LIST
+tp_str = os.environ.get("TP_LIST", "")
+tp_values = [float(x) for x in tp_str.split()]
 
-for STA in [0, 1]:
-    sta = (STA == 1)
+for ALPHA in alpha_values: # loop over coupling strengths
+    for tau in tp_values:  # loop through protocol times
+        for STA in [0, 1]:
+            sta = (STA == 1)
 
-    # Define folder name to grab files from
-    folder = os.path.join(
-        DATA_DIR,
-        f"WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}",
-        f"chi{MSTART * STEP_SIZE}"
-    )
-    # List of file names to extract data from
-    file_names = [f"{folder}/wcf_m{m}.npy" for m in range(MSTART, MSTART+(M+1))] #TODO does this need the +1?
+            # Define folder name to grab files from
+            folder = os.path.join(
+                DATA_DIR,
+                f"WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{tau}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}",
+                f"chi{MSTART * STEP_SIZE}"
+            )
+            # List of file names to extract data from
+            file_names = [f"{folder}/wcf_m{m}.npy" for m in range(MSTART, MSTART+(M+1))] #TODO does this need the +1?
 
-    # Output file where the combines data 
-    output_file = f"{WCF_DIR}/WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_t{TP}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}_X{CHI0}_Xf{CHI_F}.txt"
+            # Output file where the combines data 
+            output_file = f"{WCF_DIR}/WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_t{tau}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}_X{CHI0}_Xf{CHI_F}.txt"
 
-    # Open the output file in write mode
-    with open(output_file, 'w') as f_out:
-        # Loop through each file
-        for file_name in file_names:
-            if os.path.exists(file_name):
-                
-                # Load the complex number from the .npy file
-                complex_number = np.load(file_name)  # Assumes the file contains a single complex number
-                
-                # Check if it's indeed a complex number (optional but useful for error handling)
-                if np.iscomplexobj(complex_number):
-                    real, imag = complex_number.real, complex_number.imag  # Extract real and imaginary parts
-                    # print(file_name, real, imag)
-                    f_out.write(f"{real}\t{imag}\n")  # Write the complex number parts to the output file
-            else:
-                print(f"File {file_name} does not exist. Skipping.")
+            # Open the output file in write mode
+            with open(output_file, 'w') as f_out:
+                # Loop through each file
+                for file_name in file_names:
+                    if os.path.exists(file_name):
+                        
+                        # Load the complex number from the .npy file
+                        complex_number = np.load(file_name)  # Assumes the file contains a single complex number
+                        
+                        # Check if it's indeed a complex number (optional but useful for error handling)
+                        if np.iscomplexobj(complex_number):
+                            real, imag = complex_number.real, complex_number.imag  # Extract real and imaginary parts
+                            # print(file_name, real, imag)
+                            f_out.write(f"{real}\t{imag}\n")  # Write the complex number parts to the output file
+                    else:
+                        print(f"File {file_name} does not exist. Skipping.")
 
-    print(f"All data has been successfully combined into {output_file}.")
+            print(f"All data has been successfully combined into {output_file}.")
 

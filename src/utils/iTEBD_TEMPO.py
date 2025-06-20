@@ -9,7 +9,7 @@ from tqdm import tqdm
 from ncon import ncon  # Efficient tensor contraction
 
 # Local imports
-from utils.utils import spre, spost, sprepost, lind
+from utils.operators import spre, spost, sprepost, lind
 from utils.bath_functions import BathCorrelation
 
 

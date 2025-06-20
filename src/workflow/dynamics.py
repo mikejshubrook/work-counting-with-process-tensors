@@ -38,7 +38,7 @@ from utils.LandauerErasure_functions import *
 
 # Path handling for reliable file saving/loading
 CURRENT_FILE = os.path.abspath(__file__)
-PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_FILE, "../../"))  # Adjust based on your layout
+PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_FILE, "../../../"))  # Adjust based on your layout
 
 DATA_DIR = os.path.join(PROJECT_ROOT, "data", "dynamics-files")
 IF_DIR = os.path.join(PROJECT_ROOT, "data", "InfluenceFunctionals")
