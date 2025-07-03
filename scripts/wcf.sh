@@ -30,14 +30,14 @@ export WC=5 # spectral density cutoff
 export ALPHA_LIST="0.02" # coupling strength list, can be a single value or multiple values separated by spaces
 
 ### System parameters ###
-export TP_LIST="2.0" # list of protocol times, can be a single value or multiple values separated by spaces
+export TP_LIST="20.0" # list of protocol times, can be a single value or multiple values separated by spaces
 export EPSMAX=25.0 # maximum energy of the system
 export EPS0=0.02 # minimum energy of the system
 
 # Run py files
 python ../src/workflow/IF.py
 python ../src/workflow/wcf.py
-python ../src/workflow/wcf-combine.py
+# python ../src/workflow/wcf-combine.py
 
 
 

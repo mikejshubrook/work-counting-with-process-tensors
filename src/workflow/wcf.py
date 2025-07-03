@@ -23,6 +23,7 @@ PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_FILE, "../../../"))  # Adjus
 
 DATA_DIR = os.path.join(PROJECT_ROOT, "data", "wcf-files")
 IF_DIR = os.path.join(PROJECT_ROOT, "data", "InfluenceFunctionals")
+WCF_DIR = os.path.join(PROJECT_ROOT, "data", "wcf-files-combined")
 
 
 # import numerical parameters from BASH
@@ -50,6 +51,11 @@ S = int(os.environ['S'])                     # equilibration time (same units as
 # counting
 MSTART = int(os.environ['MSTART']) # starting value (in case you dont want to start at chi=0)
 M = int(os.environ['M']) # number of steps along chi to take
+
+
+# we convert the M values to chi, so that it is easy to compare WCFs with different values of STEP_SIZE
+CHI0 = MSTART*STEP_SIZE
+CHI_F =  (MSTART+M)*STEP_SIZE
 
 N=1
 shift=True # shift the Hamiltonian to force ground state to be zero energy at all times
@@ -93,24 +99,50 @@ for ALPHA in alpha_values: # loop over coupling strengths
                 itebd = pickle.load(file)
 
             print(f"Calculating WCF for ALPHA={ALPHA}, tp={tau}, STA={STA}, X0={MSTART*STEP_SIZE}, Xf={(MSTART+M)*STEP_SIZE}, S={S}")
+            
+            # --------------------------------------------------------------------------------------------------- #
+            # if you are parallelising the code to run on multuple CPUs, uncomment the following section
+            # you will then need to run 'wcf-combine.py' to combine the results from each CPU
+
+            # for m in range(MSTART, MSTART + M):
+            #     print(f"Calculating WCF for m={m} (chi={m*STEP_SIZE})")
+            #     # calculate the WCF for this m
+            #     wcf = process_iteration(itebd, s, f, m, Rho_0, STEP_SIZE, tau, eps0, epstau, N, shift, sta)
+            #     # Construct folder path using os.path.join
+            #     folder = os.path.join(
+            #         DATA_DIR,
+            #         f"WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{tau}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}_p5",
+            #         f"chi{MSTART*STEP_SIZE}")
+            #     print(f"Saving WCF to {folder}")
+            #     # Make sure the folder exists
+            #     os.makedirs(folder, exist_ok=True)
+
+            #     # Construct the full file path
+            #     file_name = os.path.join(folder, f"wcf_m{m}.npy")
+
+            #     # Save as .npy
+            #     np.save(file_name, wcf)
+            # --------------------------------------------------------------------------------------------------- #
+
+
+            # --------------------------------------------------------------------------------------------------- #
+            # if you are not parallelising the code, and want to save all WCFs in a single file, uncomment the following section
+            # this will save the WCFs in a single file
+            wcf_list = []  # list to store WCFs for each m
             for m in range(MSTART, MSTART + M):
                 print(f"Calculating WCF for m={m} (chi={m*STEP_SIZE})")
                 # calculate the WCF for this m
                 wcf = process_iteration(itebd, s, f, m, Rho_0, STEP_SIZE, tau, eps0, epstau, N, shift, sta)
+                # append the WCF to the list
+                wcf_list.append(wcf)
 
-                # Construct folder path using os.path.join
-                folder = os.path.join(
-                    DATA_DIR,
-                    f"WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{tau}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}_p5",
-                    f"chi{MSTART*STEP_SIZE}")
-                print(f"Saving WCF to {folder}")
-                # Make sure the folder exists
-                os.makedirs(folder, exist_ok=True)
+            # Save the list of WCFs for this ALPHA and tau
+            output_file = f"{WCF_DIR}/WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_t{tau}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}_p5_X{CHI0}_Xf{CHI_F}.txt"
 
-                # Construct the full file path
-                file_name = os.path.join(folder, f"wcf_m{m}.npy")
-
-                # Save as .npy
-                np.save(file_name, wcf)
+            # Save the list of WCFs as text with real and imaginary parts in two columns
+            with open(output_file, 'w') as f_out:
+                for wcf in wcf_list:
+                    f_out.write(f"{wcf.real:.16e}\t{wcf.imag:.16e}\n")
+            # --------------------------------------------------------------------------------------------------- #
 
 
