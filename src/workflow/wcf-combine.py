@@ -55,20 +55,21 @@ tp_values = [float(x) for x in tp_str.split()]
 
 for ALPHA in alpha_values: # loop over coupling strengths
     for tau in tp_values:  # loop through protocol times
-        for STA in [0, 1]:
+        # for STA in [0, 1]:
+        for STA in [0]:
             sta = (STA == 1)
 
             # Define folder name to grab files from
             folder = os.path.join(
                 DATA_DIR,
-                f"WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{tau}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}",
+                f"WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{tau}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}_p5",
                 f"chi{MSTART * STEP_SIZE}"
             )
             # List of file names to extract data from
-            file_names = [f"{folder}/wcf_m{m}.npy" for m in range(MSTART, MSTART+(M+1))] #TODO does this need the +1?
+            file_names = [f"{folder}/wcf_m{m}.npy" for m in range(MSTART, MSTART+M)]
 
             # Output file where the combines data 
-            output_file = f"{WCF_DIR}/WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_t{tau}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}_X{CHI0}_Xf{CHI_F}.txt"
+            output_file = f"{WCF_DIR}/WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_t{tau}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}_p5_X{CHI0}_Xf{CHI_F}.txt"
 
             # Open the output file in write mode
             with open(output_file, 'w') as f_out:

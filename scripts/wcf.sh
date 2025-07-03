@@ -6,19 +6,18 @@
 
 
 # Set number of threads (adjust to your CPU)
-export OMP_NUM_THREADS=4
+export OMP_NUM_THREADS=11
 
 # counting parameter values
 export MSTART=0 # starting value of counting integer
-export S=1 # time for equilibration
+export S=5 # time for equilibration
 
 ### Numerical parameters ###
-export STEP_SIZE=0.005 # Trotter step size, must be tested for convergence
+export STEP_SIZE=0.01 # Trotter step size, must be tested for convergence
 export PREC=7.0 # precision: 10^-{p} is the SVD threshold, must be tested for convergence
 
-
 # Choose maximum value of the counting paramter chi
-X=0.5
+X=200.0
 
 # Calculate M = X / STEP_SIZE, as an integer
 export M=$(printf "%.0f" $(echo "$X / $STEP_SIZE" | bc -l)) # number of counting integers to calculate
@@ -31,7 +30,7 @@ export WC=5 # spectral density cutoff
 export ALPHA_LIST="0.02" # coupling strength list, can be a single value or multiple values separated by spaces
 
 ### System parameters ###
-export TP_LIST="1 2 3" # list of protocol times, can be a single value or multiple values separated by spaces
+export TP_LIST="2.0" # list of protocol times, can be a single value or multiple values separated by spaces
 export EPSMAX=25.0 # maximum energy of the system
 export EPS0=0.02 # minimum energy of the system
 

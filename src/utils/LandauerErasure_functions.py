@@ -88,52 +88,115 @@ def find_IF(prec, STEP_SIZE, MEMORY_STEPS, T_max, wc,  J, BETA, delta, tr, check
     return itebd
 
 #################### HAMILTONIAN FOR LANDAUER ERASURE ####################
-
-def H_ERASURE(t, tp, eps0, eps_max, n, shift=True, sta=False):
-    """
+# Time-dependent STA ramp function
+def sta_ramp(t, tp, ramp_duration=1.0):
+    """Smooth ramp function for STA activation."""
+    if t < 0 or t > tp:
+        return 0.0
+    elif t < ramp_duration:
+        # Ramp up: use raised cosine from 0 to 1
+        return 0.5 * (1 - np.cos(np.pi * t / ramp_duration))
+    elif t > tp - ramp_duration:
+        # Ramp down: use raised cosine from 1 to 0
+        return 0.5 * (1 - np.cos(np.pi * (tp - t) / ramp_duration))
+    else:
+        # Fully on in the middle
+        return 1.0
     
-    Calculate the Hamiltonian for Landauer erasure with a specified number of oscillations.
     
-    Parameters:
-        t (float): Current time.
-        tp (float): Protocolt time.
-        eps0 (float): Initial energy splitting.
-        epstau (float): Maximum energy splitting.
-        n (int): Number of oscillations (inverse) (1 for cyclic, 2 for Miller (2020) protocol).
-        shift (bool, optional): If True, apply a shift to the Hamiltonian.
-        sta (bool, optional): If True, apply the shortcut to adiavaticity (STA) term - so long as t>0. Default is False.
+# def H_ERASURE(t, tp, eps0, eps_max, n, shift=True, sta=False):
+#     """
     
-   Returns:
-        h (numpy.ndarray): The Hamiltonian matrix.
+#     Calculate the Hamiltonian for Landauer erasure with a specified number of oscillations.
+    
+#     Parameters:
+#         t (float): Current time.
+#         tp (float): Protocolt time.
+#         eps0 (float): Initial energy splitting.
+#         epstau (float): Maximum energy splitting.
+#         n (int): Number of oscillations (inverse) (1 for cyclic, 2 for Miller (2020) protocol).
+#         shift (bool, optional): If True, apply a shift to the Hamiltonian.
+#         sta (bool, optional): If True, apply the shortcut to adiavaticity (STA) term - so long as t>0. Default is False.
+    
+#    Returns:
+#         h (numpy.ndarray): The Hamiltonian matrix.
    
+#     """
+
+#     # Calculate the mixing angle theta
+#     theta = np.pi * ((t / tp) - 1)
+
+#     # Calculate the time-dependent energy splitting
+#     eps_of_t = eps0 + (eps_max - eps0) * (np.sin(np.pi * t / (n * tp)))**2
+
+#     # Calculate the time dependent coefficients for sz and sx operators
+#     fz = 0.5 * eps_of_t * np.cos(theta)
+#     fx = 0.5 * eps_of_t * np.sin(theta)
+
+#     # define the Hamiltonian
+#     h  = fz * sz() + fx * sx() 
+    
+#     # if the shift is applied, add the shift term to the Hamiltonian
+#     if shift:
+#         # Calculate the shift required for ground state energy = 0 at all times
+#         eta = np.sqrt(fz**2 + fx**2)
+#         # add the shift to the hamiltonian with the identity operator
+#         h += eta * (sz())**2
+
+#     # if the shortcut to adiabaticity is applied, add the STA term
+#     if sta:
+#         if t>0 and t<tp: # apply it instantaneously at t=0 and turn it off at t=tp
+#         # ramp = sta_ramp(t, tp) # ramp function for STA
+#             ramp = 1 
+#             h += ramp*(np.pi / (2 * tp)) * sy() 
+
+#     # return the Hamiltonian
+#     return h
+
+def H_ERASURE(t, tp, eps0, eps_max, n, shift=True, sta=False, ramp_power=5):
+    """
+    Hamiltonian for smooth erasure protocol with tunable ramp shape.
+
+    Parameters:
+    - t: float, time
+    - tp: float, total protocol duration
+    - eps0: float, initial/final energy
+    - eps_max: float, maximum energy in the middle
+    - n: int, number of sin² oscillations in base modulation
+    - shift: bool, add ground state energy shift
+    - sta: bool, apply STA term (disabled by default)
+    - ramp_power: float, power to raise the sin function for smoother turn-on/off
+                  Higher values = flatter edges and steeper center
     """
 
-    # Calculate the mixing angle theta
+    # Tunable ramp function: sin^ramp_power(pi * t / tp)
+    ramp = np.sin(np.pi * t / tp)**ramp_power
+    # Base energy modulation
+    sin2_term = (np.sin(np.pi * t / (n * tp)))**2
+    eps_of_t = eps0 + (eps_max - eps0) * sin2_term * ramp
+
+    # Mixing angle for control direction
     theta = np.pi * ((t / tp) - 1)
 
-    # Calculate the time-dependent energy splitting
-    eps_of_t = eps0 + (eps_max - eps0) * (np.sin(np.pi * t / (n * tp)))**2
-
-    # Calculate the time dependent coefficients for sz and sx operators
+    # Pauli terms
     fz = 0.5 * eps_of_t * np.cos(theta)
     fx = 0.5 * eps_of_t * np.sin(theta)
 
-    # define the Hamiltonian
-    h  = fz * sz() + fx * sx() 
-    
-    # if the shift is applied, add the shift term to the Hamiltonian
+    # Hamiltonian construction
+    h = fz * sz() + fx * sx()
+
+    # Optional: zero ground state energy shift
     if shift:
-        # Calculate the shift required for ground state energy = 0 at all times
         eta = np.sqrt(fz**2 + fx**2)
-        # add the shift to the hamiltonian with the identity operator
-        h += eta * (sz())**2
+        h += eta * (sz()**2)
 
     # if the shortcut to adiabaticity is applied, add the STA term
     if sta:
         if t>0 and t<tp: # apply it instantaneously at t=0 and turn it off at t=tp
-          h += (np.pi / (2 * tp)) * sy() 
+        # ramp = sta_ramp(t, tp) # ramp function for STA
+            ramp = 1 
+            h += ramp*(np.pi / (2 * tp)) * sy() 
 
-    # return the Hamiltonian
     return h
 
 

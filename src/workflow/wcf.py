@@ -72,7 +72,8 @@ tp_values = [float(x) for x in tp_str.split()]
 
 for ALPHA in alpha_values: # loop over coupling strengths
     for tau in tp_values:  # loop through protocol times
-        for STA in [0, 1]:
+        # for STA in [0, 1]:
+        for STA in [0]:
             sta = (STA == 1)
 
             # define initial state (maximally mixed state)
@@ -92,16 +93,17 @@ for ALPHA in alpha_values: # loop over coupling strengths
                 itebd = pickle.load(file)
 
             print(f"Calculating WCF for ALPHA={ALPHA}, tp={tau}, STA={STA}, X0={MSTART*STEP_SIZE}, Xf={(MSTART+M)*STEP_SIZE}, S={S}")
-            for m in range(MSTART, MSTART + M + 1):
+            for m in range(MSTART, MSTART + M):
+                print(f"Calculating WCF for m={m} (chi={m*STEP_SIZE})")
                 # calculate the WCF for this m
                 wcf = process_iteration(itebd, s, f, m, Rho_0, STEP_SIZE, tau, eps0, epstau, N, shift, sta)
 
                 # Construct folder path using os.path.join
                 folder = os.path.join(
                     DATA_DIR,
-                    f"WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{tau}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}",
+                    f"WCF_a{ALPHA}_G{GAMMA}_w{W0}_e{EPSMAX}_tp{tau}_sta{STA}_dt{STEP_SIZE}_p{PREC}_eq{S}_p5",
                     f"chi{MSTART*STEP_SIZE}")
-
+                print(f"Saving WCF to {folder}")
                 # Make sure the folder exists
                 os.makedirs(folder, exist_ok=True)
 
